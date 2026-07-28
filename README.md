@@ -1,13 +1,21 @@
-# Stall Platform - Phase 1
+# STall Platform
 
-This is the Phase 1 starter structure for Stall.
+Neighborhood-first discovery platform.
 
 ## Stack
+
 - Next.js 15
+- React 19
 - TypeScript
 - Tailwind CSS
+- Turborepo
+- Prisma
+- PostgreSQL
 
-## Next Step
-Run:
-npm install
-npm run dev
+## Commands
+
+```bash
+pnpm install
+pnpm dev
+pnpm build
+```
