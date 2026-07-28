@@ -1,21 +1,22 @@
-# STall Platform
+# STall
 
-Neighborhood-first discovery platform.
+**That's All.**
 
-## Stack
+A neighbourhood-first local business discovery platform.
 
-- Next.js 15
-- React 19
-- TypeScript
-- Tailwind CSS
-- Turborepo
-- Prisma
-- PostgreSQL
+## Vision
+Connect customers with trusted local businesses in every neighbourhood.
 
-## Commands
+## Tech Stack
+- Flutter
+- NestJS
+- PostgreSQL + PostGIS
+- Next.js
+- Google Maps Platform
 
-```bash
-pnpm install
-pnpm dev
-pnpm build
-```
+## Roadmap
+- v0.1 Foundation
+- v0.2 Customer App
+- v0.3 Backend & Database
+- v0.4 Merchant/Admin
+- v1.0 Production
