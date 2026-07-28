@@ -1,1 +1,11 @@
-{"name":"stall-platform","private":true}
+{
+  "name": "stall-platform",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "website": "npm --workspace apps/website run dev",
+    "build": "npm --workspace apps/website run build"
+  }
+}
