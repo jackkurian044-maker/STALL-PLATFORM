@@ -1,65 +1,36 @@
+import Link from "next/link";
+import { MapPin } from "lucide-react";
+
 export default function Navbar() {
   return (
-    <header
-      style={{
-        background: "#fff",
-        borderBottom: "1px solid #e5e5e5",
-        position: "sticky",
-        top: 0,
-        zIndex: 100,
-      }}
-    >
-      <div
-        className="container"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          height: "72px",
-        }}
-      >
-        <div
-          style={{
-            fontSize: "28px",
-            fontWeight: 700,
-            color: "#1D7A3F",
-          }}
-        >
-          STALL
-        </div>
+    <header className="sticky top-0 z-50 border-b border-navy/10 bg-cream/90 backdrop-blur">
+      <div className="mx-auto flex h-18 max-w-6xl items-center justify-between px-6 py-4">
+        <Link href="/" className="font-display text-2xl font-semibold tracking-tight text-navy">
+          STall
+        </Link>
 
-        <nav
-          style={{
-            display: "flex",
-            gap: "16px",
-            alignItems: "center",
-          }}
-        >
-          <button
-            style={{
-              background: "transparent",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "16px",
-            }}
-          >
+        <nav className="hidden items-center gap-8 text-sm font-medium text-ink/70 md:flex">
+          <Link href="/explore" className="hover:text-navy">
             Explore
-          </button>
-
-          <button
-            style={{
-              background: "#1D7A3F",
-              color: "#fff",
-              border: "none",
-              padding: "10px 18px",
-              borderRadius: "8px",
-              cursor: "pointer",
-              fontWeight: 600,
-            }}
+          </Link>
+          <Link href="/explore?category=salon" className="hover:text-navy">
+            Categories
+          </Link>
+          <Link
+            href="/for-business"
+            className="flex items-center gap-1.5 hover:text-navy"
           >
-            Login
-          </button>
+            <MapPin size={14} />
+            List your business
+          </Link>
         </nav>
+
+        <Link
+          href="/for-business"
+          className="rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-gold transition hover:bg-ink"
+        >
+          Get listed
+        </Link>
       </div>
     </header>
   );

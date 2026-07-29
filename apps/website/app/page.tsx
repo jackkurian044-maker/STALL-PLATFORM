@@ -1,7 +1,19 @@
-export default function Home(){
-return(
-<main className='container'>
-<h1>Discover every local business around you</h1>
-<p>Welcome to STall.</p>
-</main>);
+import Hero from "../components/sections/Hero";
+import Categories from "../components/sections/Categories";
+import Featured from "../components/sections/Featured";
+import { getBusinesses, getCategories } from "../lib/api";
+
+export default async function Home() {
+  const [categories, businesses] = await Promise.all([
+    getCategories(),
+    getBusinesses(),
+  ]);
+
+  return (
+    <main>
+      <Hero />
+      <Categories categories={categories} />
+      <Featured businesses={businesses} />
+    </main>
+  );
 }

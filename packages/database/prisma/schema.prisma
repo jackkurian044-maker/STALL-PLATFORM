@@ -1,23 +1,126 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../generated/client"
 }
 
+// Using SQLite for local development. To move to Postgres/PostGIS later:
+// 1. Set provider = "postgresql"
+// 2. Set DATABASE_URL in .env to your Postgres connection string
+// 3. Run `npm run migrate` again inside packages/database
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
-}
-
-model User {
-  id        String   @id @default(cuid())
-  name      String?
-  email     String   @unique
-  password  String
-  role      Role     @default(CUSTOMER)
-  createdAt DateTime @default(now())
 }
 
 enum Role {
   CUSTOMER
   MERCHANT
   ADMIN
+}
+
+enum ClaimStatus {
+  UNCLAIMED
+  PENDING
+  CLAIMED
+}
+
+model User {
+  id            String     @id @default(cuid())
+  name          String?
+  email         String     @unique
+  password      String
+  role          Role       @default(CUSTOMER)
+  createdAt     DateTime   @default(now())
+  reviews       Review[]
+  favorites     Favorite[]
+  businesses    Business[] @relation("MerchantBusinesses")
+}
+
+model Category {
+  id          String     @id @default(cuid())
+  name        String     @unique
+  slug        String     @unique
+  icon        String     @default("🏪")
+  businesses  Business[]
+}
+
+model Business {
+  id             String       @id @default(cuid())
+  name           String
+  slug           String       @unique
+  description    String       @default("")
+  address        String
+  neighbourhood  String
+  latitude       Float
+  longitude      Float
+  phone          String       @default("")
+  whatsapp       String       @default("")
+  rating         Float        @default(0)
+  reviewCount    Int          @default(0)
+  isPremium      Boolean      @default(false)
+  isOpenNow      Boolean      @default(true)
+  claimStatus    ClaimStatus  @default(UNCLAIMED)
+  coverEmoji     String       @default("🏪")
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  categoryId     String
+  category       Category     @relation(fields: [categoryId], references: [id])
+
+  ownerId        String?
+  owner          User?        @relation("MerchantBusinesses", fields: [ownerId], references: [id])
+
+  images         BusinessImage[]
+  reviews        Review[]
+  favorites      Favorite[]
+  offers         Offer[]
+}
+
+model BusinessImage {
+  id         String   @id @default(cuid())
+  url        String
+  alt        String   @default("")
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  rating     Int
+  comment    String
+  reply      String?
+  createdAt  DateTime @default(now())
+
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+
+  authorName String   @default("Anonymous")
+}
+
+model Favorite {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, businessId])
+}
+
+model Offer {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @default("")
+  discount    String   @default("")
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+
+  businessId  String
+  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
 }

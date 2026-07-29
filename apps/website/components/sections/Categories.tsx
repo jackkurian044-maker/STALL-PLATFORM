@@ -1,58 +1,28 @@
-const categories = [
-  { icon: "💐", name: "Flowers" },
-  { icon: "✂️", name: "Salon" },
-  { icon: "🧵", name: "Tailor" },
-  { icon: "🛒", name: "Grocery" },
-  { icon: "🍴", name: "Restaurant" },
-  { icon: "🔧", name: "Electrician" },
-  { icon: "💊", name: "Pharmacy" },
-  { icon: "🍰", name: "Bakery" },
-];
+import Link from "next/link";
+import type { Category } from "../../lib/api";
 
-export default function Categories() {
+export default function Categories({ categories }: { categories: Category[] }) {
   return (
-    <section style={{ padding: "50px 0" }}>
-      <h2
-        style={{
-          fontSize: "34px",
-          marginBottom: "30px",
-          textAlign: "center",
-        }}
-      >
-        Popular Categories
+    <section className="mx-auto max-w-6xl px-6 py-16">
+      <h2 className="font-display text-3xl font-semibold text-navy">
+        Popular categories
       </h2>
+      <p className="mt-2 text-ink/60">
+        Browse by what you need, right in your neighbourhood.
+      </p>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit,minmax(170px,1fr))",
-          gap: "20px",
-        }}
-      >
+      <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {categories.map((cat) => (
-          <div
-            key={cat.name}
-            style={{
-              background: "#fff",
-              borderRadius: "16px",
-              padding: "30px",
-              textAlign: "center",
-              boxShadow: "0 4px 15px rgba(0,0,0,.08)",
-              cursor: "pointer",
-              transition: "0.2s",
-            }}
+          <Link
+            key={cat.slug}
+            href={`/explore?category=${cat.slug}`}
+            className="group rounded-2xl border border-navy/10 bg-white p-6 text-center shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
           >
-            <div style={{ fontSize: "42px" }}>{cat.icon}</div>
-
-            <h3
-              style={{
-                marginTop: "15px",
-                fontSize: "18px",
-              }}
-            >
+            <div className="text-4xl">{cat.icon}</div>
+            <h3 className="mt-3 font-medium text-navy group-hover:text-gold">
               {cat.name}
             </h3>
-          </div>
+          </Link>
         ))}
       </div>
     </section>

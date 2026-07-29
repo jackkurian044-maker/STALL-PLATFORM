@@ -1,3 +1,22 @@
 @import "tailwindcss";
-body{margin:0;font-family:Arial,sans-serif;background:#faf7f2;color:#111;}
-.container{max-width:1200px;margin:auto;padding:2rem;}
+
+@theme {
+  --color-navy: #0f1a24;
+  --color-ink: #17222c;
+  --color-gold: #f3b73d;
+  --color-gold-soft: #f8d488;
+  --color-cream: #fdf9ef;
+
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "Work Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
