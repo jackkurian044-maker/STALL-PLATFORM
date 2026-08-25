@@ -35,19 +35,26 @@ export default function Navbar() {
             alignItems: "center",
           }}
         >
-          <button
+          <a
+            href="/merchant/login"
             style={{
               background: "transparent",
               border: "none",
               cursor: "pointer",
               fontSize: "16px",
+              textDecoration: "none",
+              color: "inherit",
             }}
           >
             Explore
-          </button>
+          </a>
 
-          <button
+          <a
+            href="/merchant/login"
             style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
               background: "#1D7A3F",
               color: "#fff",
               border: "none",
@@ -55,10 +62,11 @@ export default function Navbar() {
               borderRadius: "8px",
               cursor: "pointer",
               fontWeight: 600,
+              textDecoration: "none",
             }}
           >
             Login
-          </button>
+          </a>
         </nav>
       </div>
     </header>

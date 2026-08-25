@@ -1,4 +1,23 @@
+"use client";
+
+import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import SearchBar from "../search/SearchBar";
+
 export default function Hero() {
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+
+  const handleSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const encoded = encodeURIComponent(query.trim());
+    if (!encoded) {
+      return;
+    }
+
+    router.push(`/search?q=${encoded}`);
+  };
+
   return (
     <section
       style={{
@@ -30,40 +49,8 @@ export default function Hero() {
         restaurants and every neighbourhood business in seconds.
       </p>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "12px",
-          flexWrap: "wrap",
-        }}
-      >
-        <input
-          placeholder="Search businesses..."
-          style={{
-            width: "500px",
-            maxWidth: "90%",
-            padding: "16px",
-            borderRadius: "12px",
-            border: "1px solid #ddd",
-            fontSize: "16px",
-          }}
-        />
+      <SearchBar query={query} onQueryChange={setQuery} onSearch={handleSearch} />
 
-        <button
-          style={{
-            background: "#1D7A3F",
-            color: "#fff",
-            border: "none",
-            padding: "16px 28px",
-            borderRadius: "12px",
-            cursor: "pointer",
-            fontWeight: 600,
-          }}
-        >
-          Search
-        </button>
-      </div>
     </section>
   );
 }

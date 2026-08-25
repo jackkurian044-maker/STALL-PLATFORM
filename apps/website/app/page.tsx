@@ -1,7 +1,18 @@
-export default function Home(){
-return(
-<main className='container'>
-<h1>Discover every local business around you</h1>
-<p>Welcome to STall.</p>
-</main>);
+import Navbar from "../components/layout/Navbar";
+import Hero from "../components/sections/Hero";
+import Categories from "../components/sections/Categories";
+import Featured from "../components/sections/Featured";
+
+export default function Home() {
+  return (
+    <>
+      <Navbar />
+
+      <main className="container">
+        <Hero />
+        <Categories />
+        <Featured />
+      </main>
+    </>
+  );
 }

@@ -1,25 +1,9 @@
-const businesses = [
-  {
-    name: "Aya Flowers",
-    category: "Flower Shop",
-    location: "Whitefield",
-    rating: "4.9",
-  },
-  {
-    name: "Style Expres",
-    category: "Salon",
-    location: "Kadugodi",
-    rating: "4.8",
-  },
-  {
-    name: "Fresh Mart",
-    category: "Grocery",
-    location: "Belathur",
-    rating: "4.7",
-  },
-];
+import Link from "next/link";
+import { getBusinesses } from "@/lib/business";
 
 export default function Featured() {
+  const businesses = getBusinesses();
+
   return (
     <section style={{ padding: "60px 0" }}>
       <h2
@@ -41,7 +25,7 @@ export default function Featured() {
       >
         {businesses.map((business) => (
           <div
-            key={business.name}
+            key={business.id}
             style={{
               background: "#fff",
               borderRadius: "16px",
@@ -67,25 +51,27 @@ export default function Featured() {
 
               <p style={{ color: "#666" }}>{business.category}</p>
 
-              <p>📍 {business.location}</p>
+              <p>📍 {business.city}</p>
 
               <p>⭐ {business.rating}</p>
 
-              <button
-                style={{
-                  marginTop: "10px",
-                  width: "100%",
-                  padding: "12px",
-                  background: "#1D7A3F",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "10px",
-                  cursor: "pointer",
-                  fontWeight: 600,
-                }}
-              >
-                View Details
-              </button>
+              <Link href={`/business/${business.id}`}>
+                <button
+                  style={{
+                    marginTop: "10px",
+                    width: "100%",
+                    padding: "12px",
+                    background: "#1D7A3F",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "10px",
+                    cursor: "pointer",
+                    fontWeight: 600,
+                  }}
+                >
+                  View Details
+                </button>
+              </Link>
             </div>
           </div>
         ))}
