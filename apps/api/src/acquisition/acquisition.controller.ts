@@ -19,9 +19,9 @@ export class AcquisitionController {
     return this.service.create(dto);
   }
 
-  @Post("candidates/:id/import")
-  importApproved(@Param("id") id: string) {
-    return this.service.importApproved(id);
+  @Post("candidates/:id/handoff")
+  handoff(@Param("id") id: string) {
+    return this.service.handoff(id);
   }
 
   @Post("candidates/:id/outreach")
