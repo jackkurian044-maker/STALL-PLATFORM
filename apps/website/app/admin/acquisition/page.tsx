@@ -32,6 +32,17 @@ export default function AcquisitionPage() {
     finally { setBusy(false); }
   }
 
+  async function action(id: string, path: string) {
+    setBusy(true); setMessage("");
+    try {
+      const res = await fetch(`${API}/acquisition/candidates/${id}/${path}`, { method: "POST", headers: { "x-acquisition-admin-key": savedKey } });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Action failed");
+      if (path === "outreach" && data.whatsappUrl) window.open(data.whatsappUrl, "_blank", "noopener,noreferrer");
+      await load();
+    } catch (e) { setMessage(e instanceof Error ? e.message : "Action failed"); setBusy(false); }
+  }
+
   async function setStatus(id: string, status: string) {
     setBusy(true); setMessage("");
     try {
@@ -52,6 +63,6 @@ export default function AcquisitionPage() {
   <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">{[["DISCOVERED","Discovered"],["SHORTLISTED","Shortlisted"],["APPROVED","Approved"],["IMPORTED","Imported"]].map(([k,l])=><div key={k} className="rounded-2xl border border-black/10 bg-white p-4"><div className="text-2xl font-semibold">{counts[k] ?? 0}</div><div className="text-xs text-black/50">{l}</div></div>)}</div>
   <div className="mt-6 flex flex-wrap gap-2">{statuses.map(s=><button key={s} onClick={()=>{setFilter(s);load(s)}} className={`rounded-full border px-3 py-2 text-xs ${filter===s?"border-amber-500 bg-amber-50":"border-black/10 bg-white"}`}>{s.replace("_"," ")}</button>)}</div>
   {message && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">{message}</div>}
-  <div className="mt-4 overflow-hidden rounded-2xl border border-black/10 bg-white">{items.length===0 ? <div className="p-8 text-center text-sm text-black/50">{busy?"Loading candidates…":"No candidates in this view yet."}</div> : items.map(c=><div key={c.id} className="grid gap-3 border-b border-black/5 p-4 last:border-0 md:grid-cols-[1.7fr_1fr_100px_130px_auto] md:items-center"><div><div className="font-semibold">{c.name}</div><div className="text-xs text-black/50">{c.category || "Business"} · {c.address || c.neighbourhood}</div></div><div className="text-sm">{c.phone || c.whatsapp || "No phone"}</div><div className="text-sm">{c.rating ? `${c.rating} ★` : "—"}</div><div><span className="rounded-full bg-black/5 px-2 py-1 text-xs">{c.status}</span></div><div className="flex flex-wrap gap-2">{c.status==="DISCOVERED"&&<button onClick={()=>setStatus(c.id,"SHORTLISTED")} className="rounded-lg bg-[#0f1a24] px-3 py-2 text-xs font-semibold text-white">Shortlist</button>}{c.status==="SHORTLISTED"&&<button onClick={()=>setStatus(c.id,"APPROVED")} className="rounded-lg bg-[#0f1a24] px-3 py-2 text-xs font-semibold text-white">Approve</button>}{c.status==="APPROVED"&&<span className="text-xs text-amber-700">Ready for controlled import</span>}</div></div>)}</div>
+  <div className="mt-4 overflow-hidden rounded-2xl border border-black/10 bg-white">{items.length===0 ? <div className="p-8 text-center text-sm text-black/50">{busy?"Loading candidates…":"No candidates in this view yet."}</div> : items.map(c=><div key={c.id} className="grid gap-3 border-b border-black/5 p-4 last:border-0 md:grid-cols-[1.7fr_1fr_100px_130px_auto] md:items-center"><div><div className="font-semibold">{c.name}</div><div className="text-xs text-black/50">{c.category || "Business"} · {c.address || c.neighbourhood}</div></div><div className="text-sm">{c.phone || c.whatsapp || "No phone"}</div><div className="text-sm">{c.rating ? `${c.rating} ★` : "—"}</div><div><span className="rounded-full bg-black/5 px-2 py-1 text-xs">{c.status}</span></div><div className="flex flex-wrap gap-2">{c.status==="DISCOVERED"&&<button onClick={()=>setStatus(c.id,"SHORTLISTED")} className="rounded-lg bg-[#0f1a24] px-3 py-2 text-xs font-semibold text-white">Shortlist</button>}{c.status==="SHORTLISTED"&&<button onClick={()=>setStatus(c.id,"APPROVED")} className="rounded-lg bg-[#0f1a24] px-3 py-2 text-xs font-semibold text-white">Approve</button>}{c.status==="APPROVED"&&<button onClick={()=>action(c.id,"import")} className="rounded-lg bg-[#0f1a24] px-3 py-2 text-xs font-semibold text-white">Import</button>}{c.status==="IMPORTED"&&<button onClick={()=>action(c.id,"outreach")} className="rounded-lg border border-green-300 bg-green-50 px-3 py-2 text-xs font-semibold text-green-800">WhatsApp</button>}{c.status==="CONTACTED"&&<button onClick={()=>action(c.id,"outreach")} className="rounded-lg border border-green-300 bg-green-50 px-3 py-2 text-xs font-semibold text-green-800">WhatsApp</button>}</div></div>)}</div>
   </div></main>;
 }
