@@ -19,6 +19,16 @@ export class AcquisitionController {
     return this.service.create(dto);
   }
 
+  @Post("candidates/:id/import")
+  importApproved(@Param("id") id: string) {
+    return this.service.importApproved(id);
+  }
+
+  @Post("candidates/:id/outreach")
+  outreach(@Param("id") id: string) {
+    return this.service.outreach(id);
+  }
+
   @Post("candidates/:id/status")
   setStatus(@Param("id") id: string, @Body("status") status: AcquisitionStatus) {
     return this.service.setStatus(id, status);
