@@ -30,13 +30,26 @@ export class AcquisitionService {
   }
 
   async setStatus(id: string, status: AcquisitionStatus) {
-    try {
-      return await this.repo.update(id, {
-        status,
-        ...(status === "CONTACTED" ? { contactedAt: new Date() } : {}),
-      });
-    } catch {
-      throw new NotFoundException("Acquisition candidate not found");
+    const current = await this.repo.findById(id);
+    if (!current) throw new NotFoundException("Acquisition candidate not found");
+
+    const allowed: Record<AcquisitionStatus, AcquisitionStatus[]> = {
+      DISCOVERED: ["SHORTLISTED", "REJECTED", "DUPLICATE"],
+      SHORTLISTED: ["APPROVED", "REJECTED", "DUPLICATE"],
+      APPROVED: ["IMPORTED", "REJECTED"],
+      REJECTED: ["SHORTLISTED"],
+      DUPLICATE: [],
+      IMPORTED: ["CONTACTED"],
+      CONTACTED: ["CLAIMED"],
+      CLAIMED: [],
+    };
+    if (status === current.status) return current;
+    if (!allowed[current.status].includes(status)) {
+      throw new Error(`Invalid acquisition transition: ${current.status} → ${status}`);
     }
+    return this.repo.update(id, {
+      status,
+      ...(status === "CONTACTED" ? { contactedAt: new Date() } : {}),
+    });
   }
 }
