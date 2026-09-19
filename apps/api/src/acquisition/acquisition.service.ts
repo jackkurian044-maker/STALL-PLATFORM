@@ -3,14 +3,6 @@ import { AcquisitionRepository } from "./acquisition.repository";
 import { CreateCandidateDto } from "./dto/create-candidate.dto";
 import { AcquisitionStatus } from "@prisma/client";
 
-function slugify(value: string) {
-  return value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "business";
-}
-
-function claimCode() {
-  return `STL-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
-}
-
 @Injectable()
 export class AcquisitionService {
   constructor(private readonly repo: AcquisitionRepository) {}
