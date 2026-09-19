@@ -1,9 +1,11 @@
-import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Query, UseGuards } from "@nestjs/common";
 import { AcquisitionService } from "./acquisition.service";
 import { CreateCandidateDto } from "./dto/create-candidate.dto";
 import { AcquisitionStatus } from "@prisma/client";
+import { AcquisitionAdminGuard } from "./acquisition-admin.guard";
 
 @Controller("acquisition")
+@UseGuards(AcquisitionAdminGuard)
 export class AcquisitionController {
   constructor(private readonly service: AcquisitionService) {}
 
