@@ -17,6 +17,10 @@ export class AcquisitionRepository {
     return this.prisma.client.acquisitionCandidate.create({ data });
   }
 
+  findById(id: string) {
+    return this.prisma.client.acquisitionCandidate.findUnique({ where: { id } });
+  }
+
   update(id: string, data: Prisma.AcquisitionCandidateUpdateInput) {
     return this.prisma.client.acquisitionCandidate.update({ where: { id }, data });
   }
