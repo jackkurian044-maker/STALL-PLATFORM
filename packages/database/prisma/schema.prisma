@@ -26,9 +26,12 @@ enum AcquisitionStatus {
   APPROVED
   REJECTED
   DUPLICATE
-  IMPORTED
   CONTACTED
-  CLAIMED
+  FOLLOW_UP
+  INTERESTED
+  NOT_INTERESTED
+  READY_FOR_STALL
+  HANDED_OFF
 }
 
 model User {
@@ -98,7 +101,9 @@ model AcquisitionCandidate {
   notes           String            @default("")
   claimId         String?
   importedBusinessId String?
-  contactedAt     DateTime?
+  contactedAt       DateTime?
+  interestedAt      DateTime?
+  handedOffAt       DateTime?
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
 
