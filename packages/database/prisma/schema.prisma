@@ -3,10 +3,6 @@ generator client {
   output   = "../generated/client"
 }
 
-// Using SQLite for local development. To move to Postgres/PostGIS later:
-// 1. Set provider = "postgresql"
-// 2. Set DATABASE_URL in .env to your Postgres connection string
-// 3. Run `npm run migrate` again inside packages/database
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -21,6 +17,17 @@ enum Role {
 enum ClaimStatus {
   UNCLAIMED
   PENDING
+  CLAIMED
+}
+
+enum AcquisitionStatus {
+  DISCOVERED
+  SHORTLISTED
+  APPROVED
+  REJECTED
+  DUPLICATE
+  IMPORTED
+  CONTACTED
   CLAIMED
 }
 
@@ -63,17 +70,41 @@ model Business {
   coverEmoji     String       @default("🏪")
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
-
   categoryId     String
   category       Category     @relation(fields: [categoryId], references: [id])
-
   ownerId        String?
   owner          User?        @relation("MerchantBusinesses", fields: [ownerId], references: [id])
-
   images         BusinessImage[]
   reviews        Review[]
   favorites      Favorite[]
   offers         Offer[]
+}
+
+model AcquisitionCandidate {
+  id              String            @id @default(cuid())
+  source          String            @default("manual")
+  externalId      String?
+  name            String
+  category        String            @default("")
+  address         String            @default("")
+  neighbourhood   String            @default("")
+  phone           String            @default("")
+  whatsapp        String            @default("")
+  latitude        Float?
+  longitude       Float?
+  rating          Float?
+  reviewCount     Int?
+  status          AcquisitionStatus @default(DISCOVERED)
+  notes           String            @default("")
+  claimId         String?
+  importedBusinessId String?
+  contactedAt     DateTime?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@unique([source, externalId])
+  @@index([status])
+  @@index([neighbourhood])
 }
 
 model BusinessImage {
@@ -90,26 +121,20 @@ model Review {
   comment    String
   reply      String?
   createdAt  DateTime @default(now())
-
   businessId String
   business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
-
   userId     String?
   user       User?    @relation(fields: [userId], references: [id])
-
   authorName String   @default("Anonymous")
 }
 
 model Favorite {
   id         String   @id @default(cuid())
   createdAt  DateTime @default(now())
-
   userId     String
   user       User     @relation(fields: [userId], references: [id])
-
   businessId String
   business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
-
   @@unique([userId, businessId])
 }
 
@@ -120,7 +145,6 @@ model Offer {
   discount    String   @default("")
   expiresAt   DateTime
   createdAt   DateTime @default(now())
-
   businessId  String
   business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
 }
