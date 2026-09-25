@@ -4,9 +4,24 @@ import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 
 export const metadata: Metadata = {
-  title: "STall — every neighbourhood business, one search away",
+  metadataBase: new URL("https://stallwale.in"),
+  title: {
+    default: "STall — neighbourhood businesses, one search away",
+    template: "%s | STall",
+  },
   description:
-    "Discover trusted local businesses near you — salons, flower shops, tailors, grocers and more.",
+    "STall is a neighbourhood-first technology platform for discovering local businesses, exploring business profiles and helping nearby businesses get found.",
+  alternates: {
+    canonical: "https://stallwale.in",
+  },
+  openGraph: {
+    title: "STall — neighbourhood businesses, one search away",
+    description:
+      "Discover local businesses and help neighbourhood businesses get found.",
+    url: "https://stallwale.in",
+    siteName: "STall",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -17,8 +32,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Loaded at runtime in the browser (not build time) so this
-            works in network-restricted build environments too. */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -38,4 +51,3 @@ export default function RootLayout({
     </html>
   );
 }
-
